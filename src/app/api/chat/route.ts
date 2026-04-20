@@ -1,15 +1,15 @@
-const API_BASE =
-  "https://the-sphinx-server.tail4034e9.ts.net/webhook/SarenaChat";
-
-export async function sendMessage(message: string): Promise<string> {
-  const url = `${API_BASE}/chatInput=${encodeURIComponent(`"${message}"`)}`;
+export async function POST(message: string): Promise<string> {
+  const url = "https://the-sphinx-server.tail4034e9.ts.net/webhook/SarenaChat/chatInput";
 
   const response = await fetch(url, {
     method: "POST",
+
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(message),
+    body: JSON.stringify({
+      chatInput: message
+    }),
   });
 
   if (!response.ok) {

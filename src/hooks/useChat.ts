@@ -2,8 +2,8 @@
 
 import { useState, useCallback, useRef } from 'react'
 import { Conversation, ConversationFolder, Message } from '@/types'
-import { sendMessage } from '@/lib/api'
 import { generateId } from '@/lib/utils'
+import { POST } from '@/app/api/chat/route'
 
 const msg = (role: 'user' | 'assistant', content: string, daysAgo = 0): Message => ({
   id: generateId(),
@@ -223,7 +223,7 @@ export function useChat() {
       setIsLoading(true)
 
       try {
-        const fullText = await sendMessage(content.trim())
+        const fullText = await POST(content.trim())
         const assistantMsgId = generateId()
         const assistantMsg: Message = {
           id: assistantMsgId,
