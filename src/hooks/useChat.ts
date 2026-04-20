@@ -223,7 +223,18 @@ export function useChat() {
       setIsLoading(true)
 
       try {
-        const fullText = await POST(content.trim())
+        // Call the API route using fetch, sending chatInput in the body
+        const res = await fetch("/api/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ chatInput: content.trim() }),
+        });
+        if (!res.ok) throw new Error("Failed to get response from chat API");
+        const data = await res.json();
+        // If the response is a string, use it directly; otherwise, try to extract the main content
+        const fullText = typeof data === "string"
+          ? data
+          : data.output || data.text || data.message || data.response || data.content || JSON.stringify(data);
         const assistantMsgId = generateId()
         const assistantMsg: Message = {
           id: assistantMsgId,
